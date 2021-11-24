@@ -1,5 +1,5 @@
 'use strict';
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
  
 export default class ToDoList {
     static #help = `\nParancssori Todo applikáció
@@ -15,6 +15,7 @@ export default class ToDoList {
         this.args = args;
         if (this.args.length === 0) this.printHelp();
         if (this.args.length === 1 && this.args[0] === '-l') this.printList();
+        if (this.args.length === 2 && this.args[0] === '-a') this.appendItem(this.args[1]);
     }
 
     printHelp() {
@@ -35,5 +36,13 @@ export default class ToDoList {
             console.log(error.message);;
         }
     }
-    
+    appendItem(item) {
+        try {
+            const toDoListArr = JSON.parse(readFileSync('todoslist.json', 'utf8'));
+            toDoListArr.push({todo: item});
+            writeFileSync('todoslist.json', JSON.stringify(toDoListArr).split(',').join(',\n'));
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
 }
