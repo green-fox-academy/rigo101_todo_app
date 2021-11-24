@@ -1,15 +1,5 @@
+import ToDoList from './ToDoList.js';
 
-const help = `Parancssori Todo applikáció
-=============================
+const toDoList = new ToDoList(process.argv.slice(2));
 
-Parancssori argumentumok:
-    -l   Kilistázza a feladatokat
-    -a   Új feladatot ad hozzá
-    -r   Eltávolít egy feladatot
-    -c   Teljesít egy feladatot`;
-
-
-if (process.argv.slice(2).length === 0) {
-    console.log(help);
-}
 
