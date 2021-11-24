@@ -1,3 +1,6 @@
+'use strict';
+import { readFileSync } from 'fs';
+ 
 export default class ToDoList {
     static #help = `\nParancssori Todo applikáció
 =============================
@@ -11,16 +14,22 @@ export default class ToDoList {
     constructor(args) {
         this.args = args;
         if (this.args.length === 0) this.printHelp();
+        if (this.args.length === 1 && this.args[0] === '-l') this.printList();
     }
 
     printHelp() {
         console.log(ToDoList.#help);
     }
     
-    // printL() {
-    //     if (this.args.length === 1 && this.args[0] === '-l') {
-    //         console.log('barmi');
-    //     }
-    // }
+    printList() {
+        try {
+            const toDoListArr = JSON.parse(readFileSync('todoslist.json', 'utf8'));
+            toDoListArr.forEach((item, index) => {
+                console.log(`${index+1} - ${item.todo}`);
+            });
+        } catch (error) {
+            throw new Error('File can\'t be opened');
+        }
+    }
     
 }
