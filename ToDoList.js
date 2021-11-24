@@ -24,11 +24,15 @@ export default class ToDoList {
     printList() {
         try {
             const toDoListArr = JSON.parse(readFileSync('todoslist.json', 'utf8'));
+            if(toDoListArr.length === 0) {
+                console.log('Nincs mára tennivalód! :)');
+                return;
+            }
             toDoListArr.forEach((item, index) => {
-                console.log(`${index+1} - ${item.todo}`);
+                console.log(`${index + 1} - ${item.todo}`);
             });
         } catch (error) {
-            throw new Error('File can\'t be opened');
+            console.log(error.message);;
         }
     }
     
