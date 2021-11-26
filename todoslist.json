@@ -1,6 +1,1 @@
-[{"todo":"Kutyát sétáltatni"},
-{"todo":"Tejet venni"},
-{"todo":"Megcsinálni a leckét"},
-{"todo":"kiskutya"},
-{"todo":"kismacska"},
-{"todo":"kismalac"}]
+[{"todo":"Kutyát sétáltatni","status":false},{"todo":"Tejet venni","status":true},{"todo":"Megcsinálni a leckét","status":true},{"todo":"New Item1","status":false},{"todo":"New Item3","status":false}]

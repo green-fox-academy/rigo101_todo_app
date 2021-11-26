@@ -47,7 +47,8 @@ export default class ToDoList {
                         this.printList();
                         break;
                     default:
-                        console.log(`Unknown argument: ${arg}`);
+                        console.log(`Nem támogatott argumentum!: ${arg}`);
+                        this.printHelp();
                 }
             }
         }
