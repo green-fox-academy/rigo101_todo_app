@@ -12,35 +12,40 @@ export default class ToDoList {
         -r   Eltávolít egy feladatot
         -c   Teljesít egy feladatot`;
         
-        constructor(args) {
-            this.args = args;
-            try {
-                if(!existsSync(ToDoList.#fileName)) {
-                    writeFileSync(ToDoList.#fileName, '[]');
-                }
-            } catch(err) {
-                console.error(err)
+    constructor(args) {
+        this.args = args;
+        try {
+            if(!existsSync(ToDoList.#fileName)) {
+                writeFileSync(ToDoList.#fileName, '[]');
             }
-            
-            // ['-a', 'Buy apple', '-l', 'KEFE', '-c', '2',]
-            if (this.args.length === 0) {
-                this.printHelp();
-            } else {
-                while (this.args.length) {
-                    const arg = this.args.shift();
-                    switch (arg) {
-                        case '-a':
-                            const elToAdd = this.args.shift();
-                            elToAdd ? this.appendItem(elToAdd) : console.log('Missing to do item');
-                            break;
-                        case '-l':
-                            this.printList();
-                            break;
-                        default:
-                            console.log(`Unknown argument: ${arg}`);
-                    }
+        } catch(err) {
+            console.error(err)
+        }
+        
+        // ['-a', 'Buy apple', '-l', 'KEFE', '-c', '2',]
+        if (this.args.length === 0) {
+            this.printHelp();
+        } else {
+            while (this.args.length) {
+                const arg = this.args.shift();
+                switch (arg) {
+                    case '-a':
+                        const elToAdd = this.args.shift();
+                        elToAdd ? this.appendItem(elToAdd) : console.log('Missing to do item');
+                        break;
+                    case '-c':
+                        const elIndexToCompleteStr= this.args.shift();
+                        const elIndexToCompleteNo = Number(elIndexToCompleteStr);
+                        elIndexToCompleteNo > 0 ? this.completTask(elIndexToCompleteNo) : console.log(`Invalid index ${elIndexToCompleteStr}`);
+                        break;
+                    case '-l':
+                        this.printList();
+                        break;
+                    default:
+                        console.log(`Unknown argument: ${arg}`);
                 }
             }
+        }
     }
 
     printHelp() {
@@ -55,7 +60,7 @@ export default class ToDoList {
                 return;
             }
             toDoListArr.forEach((item, index) => {
-                console.log(`${index + 1} - ${item.todo}`);
+                console.log(`${index + 1} - ${item.status ? 'Done       ' : 'Uncompleted'} - ${item.todo} `);
             });
         } catch (error) {
             console.log(error.message);
@@ -64,8 +69,21 @@ export default class ToDoList {
     appendItem(item) {
         try {
             const toDoListArr = JSON.parse(readFileSync(ToDoList.#fileName, 'utf8'));
-            toDoListArr.push({todo: item});
-            writeFileSync(ToDoList.#fileName, JSON.stringify(toDoListArr).split(',').join(',\n'));
+            toDoListArr.push({todo: item, status: false});
+            writeFileSync(ToDoList.#fileName, JSON.stringify(toDoListArr));
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+    completTask(index) {
+        try {
+            const toDoListArr = JSON.parse(readFileSync(ToDoList.#fileName, 'utf8'));
+            if (index > toDoListArr.length) {
+                console.log(`No item with such a big index as ${index}!`);
+                return;
+            }
+            toDoListArr[index - 1].status = true;
+            writeFileSync(ToDoList.#fileName, JSON.stringify(toDoListArr));
         } catch (error) {
             console.log(error.message);
         }
