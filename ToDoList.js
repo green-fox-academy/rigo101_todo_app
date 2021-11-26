@@ -34,9 +34,14 @@ export default class ToDoList {
                         elToAdd ? this.appendItem(elToAdd) : console.log('Missing to do item');
                         break;
                     case '-c':
-                        const elIndexToCompleteStr= this.args.shift();
-                        const elIndexToCompleteNo = Number(elIndexToCompleteStr);
-                        elIndexToCompleteNo > 0 ? this.completTask(elIndexToCompleteNo) : console.log(`Invalid index ${elIndexToCompleteStr}`);
+                        const elSerialToCompleteStr= this.args.shift();
+                        const elSerialToCompleteNo = Number(elSerialToCompleteStr);
+                        elSerialToCompleteNo > 0 ? this.completTask(elSerialToCompleteNo) : console.log(`Invalid index ${elSerialToCompleteStr}`);
+                        break;
+                    case '-r':
+                        const elSerialToDeleteStr= this.args.shift();
+                        const elSerialToDeleteNo = Number(elSerialToDeleteStr);
+                        elSerialToDeleteNo > 0 ? this.deleteTask(elSerialToDeleteNo) : console.log(`Invalid index ${elSerialToDeleteStr}`);
                         break;
                     case '-l':
                         this.printList();
@@ -50,8 +55,7 @@ export default class ToDoList {
 
     printHelp() {
         console.log(ToDoList.#help);
-    }
-    
+    }    
     printList() {
         try {
             const toDoListArr = JSON.parse(readFileSync(ToDoList.#fileName, 'utf8'));
@@ -84,6 +88,19 @@ export default class ToDoList {
             }
             toDoListArr[index - 1].status = true;
             writeFileSync(ToDoList.#fileName, JSON.stringify(toDoListArr));
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+    deleteTask(index) {
+        try {
+            const toDoListArr = JSON.parse(readFileSync(ToDoList.#fileName, 'utf8'));
+            if (index > toDoListArr.length) {
+                console.log(`No item with such a big index as ${index}!`);
+                return;
+            }
+            const newArr = toDoListArr.filter( item => item !== toDoListArr[index - 1]);
+            writeFileSync(ToDoList.#fileName, JSON.stringify(newArr));
         } catch (error) {
             console.log(error.message);
         }
