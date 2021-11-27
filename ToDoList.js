@@ -3,7 +3,6 @@ import { readFileSync, writeFileSync, existsSync } from 'fs';
  
 export default class ToDoList {
     static #fileName = 'todoslist.json';
-    // readFileSync(ToDoList.#fileName, 'utf8');
     static #help = `\nParancssori Todo applikáció
 =============================
     
